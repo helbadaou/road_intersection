@@ -35,10 +35,34 @@ pub fn generate_points(size: (u32, u32)) -> Vec<Points> {
         Point::new(middle_w + road_w, middle_h + road_h),
         Point::new(middle_w * 2, middle_h + road_h),
     ));
-    res.push(Points(Point::new(middle_w + road_w, middle_h + road_h), Point::new(middle_w + road_w, middle_h*2)));
-   
-    res.push(Points(Point::new(middle_w, 0), Point::new(middle_w , middle_h*2)));
-    res.push(Points(Point::new(0 , middle_h ), Point::new(middle_w *2, middle_h)));
-    
+    res.push(Points(
+        Point::new(middle_w + road_w, middle_h + road_h),
+        Point::new(middle_w + road_w, middle_h * 2),
+    ));
+
+    res.push(Points(
+        Point::new(middle_w, 0),
+        Point::new(middle_w, middle_h - road_h),
+    ));
+    res.push(Points(
+        Point::new(middle_w, middle_h - road_h),
+        Point::new(middle_w, middle_h - road_h),
+    ));
+     res.push(Points(
+        Point::new(middle_w, middle_h + road_h),
+        Point::new(middle_w, middle_h *2),
+    ));
+
+
+    res.push(Points(
+        Point::new(0, middle_h),
+        Point::new(middle_w - road_w, middle_h),
+    ));
+
+    res.push(Points(
+        Point::new(middle_w + road_w, middle_h),
+        Point::new(middle_w * 2, middle_h),
+    ));
+
     res
 }
