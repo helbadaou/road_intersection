@@ -31,31 +31,21 @@ pub fn main() {
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
-                Event::Quit { .. }
-                | Event::KeyDown {
-                    keycode: Some(Keycode::Escape),
-                    ..
-                } => break 'running,
+                Event::Quit { .. } | Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
+                    break 'running;
+                }
 
-                Event::KeyDown {
-                    keycode: Some(Keycode::Up),
-                    ..
-                } => cars.push(generate_cars(Key::Up, canvas.window().size())),
+                Event::KeyDown { keycode: Some(Keycode::Up), .. } =>
+                    cars.push(generate_cars(Key::Up, canvas.window().size())),
 
-                Event::KeyDown {
-                    keycode: Some(Keycode::Down),
-                    ..
-                } => cars.push(generate_cars(Key::Down, canvas.window().size())),
+                Event::KeyDown { keycode: Some(Keycode::Down), .. } =>
+                    cars.push(generate_cars(Key::Down, canvas.window().size())),
 
-                Event::KeyDown {
-                    keycode: Some(Keycode::Left),
-                    ..
-                } => cars.push(generate_cars(Key::Left, canvas.window().size())),
+                Event::KeyDown { keycode: Some(Keycode::Left), .. } =>
+                    cars.push(generate_cars(Key::Left, canvas.window().size())),
 
-                Event::KeyDown {
-                    keycode: Some(Keycode::Right),
-                    ..
-                } => cars.push(generate_cars(Key::Right, canvas.window().size())),
+                Event::KeyDown { keycode: Some(Keycode::Right), .. } =>
+                    cars.push(generate_cars(Key::Right, canvas.window().size())),
 
                 _ => {}
             }
@@ -77,7 +67,22 @@ pub fn main() {
             canvas.set_draw_color(light.color);
             let _ = canvas.draw_rect(Rect::new(light.x, light.y, light.width, light.hight));
         }
-
+        for car in cars.iter_mut() {
+            match car.dir {
+                Direction::Sud => {
+                    car.y -= 1;
+                }
+                Direction::Nord => {
+                    car.y += 1;
+                }
+                Direction::West => {
+                    car.x -= 1;
+                }
+                Direction::Ouest => {
+                    car.x += 1;
+                }
+            }
+        }
         for car in cars.iter() {
             canvas.set_draw_color(car.color);
             let _ = canvas.draw_rect(Rect::new(car.x, car.y, car.width, car.hight));
