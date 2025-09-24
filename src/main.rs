@@ -26,26 +26,54 @@ pub fn main() {
     let lights = generate_traficlight(canvas.window().size());
 
     let mut event_pump = sdl_context.event_pump().unwrap();
-    let mut cars: Vec<Car> = Vec::new();
+    let mut cars: Vec<Vec<Car>> = vec![vec![], vec![], vec![], vec![]];
 
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
-                Event::Quit { .. } | Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
+                Event::Quit { .. }
+                | Event::KeyDown {
+                    keycode: Some(Keycode::Escape),
+                    ..
+                } => {
                     break 'running;
                 }
 
-                Event::KeyDown { keycode: Some(Keycode::Up), .. } =>
-                    cars.push(generate_cars(Key::Up, canvas.window().size())),
+                Event::KeyDown {
+                    keycode: Some(Keycode::Up),
+                    ..
+                } => {
+                    cars[0].push(generate_cars(Key::Up, canvas.window().size()));
+                    let vehicles_not_passed: Vec<Car> =
+                        cars[0].iter().filter(|car| !car.passed).cloned().collect();
+                }
 
-                Event::KeyDown { keycode: Some(Keycode::Down), .. } =>
-                    cars.push(generate_cars(Key::Down, canvas.window().size())),
+                Event::KeyDown {
+                    keycode: Some(Keycode::Down),
+                    ..
+                } => {
+                    cars[1].push(generate_cars(Key::Down, canvas.window().size()));
+                    let vehicles_not_passed: Vec<Car> =
+                        cars[1].iter().filter(|car| !car.passed).cloned().collect();
+                },
 
-                Event::KeyDown { keycode: Some(Keycode::Left), .. } =>
-                    cars.push(generate_cars(Key::Left, canvas.window().size())),
+                Event::KeyDown {
+                    keycode: Some(Keycode::Left),
+                    ..
+                } => {
+                    cars[2].push(generate_cars(Key::Left, canvas.window().size()));
+                    let vehicles_not_passed: Vec<Car> =
+                        cars[2].iter().filter(|car| !car.passed).cloned().collect();
+                },
 
-                Event::KeyDown { keycode: Some(Keycode::Right), .. } =>
-                    cars.push(generate_cars(Key::Right, canvas.window().size())),
+                Event::KeyDown {
+                    keycode: Some(Keycode::Right),
+                    ..
+                } => {
+                    cars[3].push(generate_cars(Key::Right, canvas.window().size()));
+                    let vehicles_not_passed: Vec<Car> =
+                        cars[3].iter().filter(|car| !car.passed).cloned().collect();
+                },
 
                 _ => {}
             }
@@ -67,7 +95,8 @@ pub fn main() {
             canvas.set_draw_color(light.color);
             let _ = canvas.draw_rect(Rect::new(light.x, light.y, light.width, light.hight));
         }
-        for car in cars.iter_mut() {
+        // if cars.len() > 0 {
+        for car in cars[0].iter_mut() {
             match car.dir {
                 Direction::Sud => {
                     car.y -= 1;
@@ -83,10 +112,11 @@ pub fn main() {
                 }
             }
         }
-        for car in cars.iter() {
+        for car in cars[0].iter() {
             canvas.set_draw_color(car.color);
             let _ = canvas.draw_rect(Rect::new(car.x, car.y, car.width, car.hight));
         }
+        // }
 
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
