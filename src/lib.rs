@@ -70,7 +70,7 @@ pub enum Direction {
     Sud,   // buttom
     Nord,  // top
     West,  // right
-    Ouest, // left
+    East, // left
 }
 #[derive(Clone, Debug)]
 
@@ -165,6 +165,7 @@ pub struct Car {
     pub y: i32,
     pub width: u32,
     pub hight: u32,
+    pub is_turned: bool,
 }
 impl Car {
     pub fn new(dir: Direction, color: Color, x: i32, y: i32, width: u32, hight: u32) -> Self {
@@ -176,6 +177,7 @@ impl Car {
             y,
             width,
             hight,
+            is_turned: false,
         }
     }
 }
@@ -214,7 +216,7 @@ pub fn generate_cars(key_t: Key, size: (u32, u32)) -> Car {
             height,
         ),
         _ => Car::new(
-            Direction::Ouest,
+            Direction::East,
             Color::RGB(200, 0, 0),
             0,
             middle_h + (height as i32) / 2,

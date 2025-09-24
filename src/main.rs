@@ -10,7 +10,7 @@ use std::time::Duration;
 pub struct Sud {}
 pub struct Nord {}
 pub struct Est {}
-pub struct Ouest {}
+pub struct East {}
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
@@ -135,26 +135,30 @@ pub fn main() {
                 match car.dir {
                     Direction::Sud => {
                         car.y -= 1;
-                        if car.y == 400 - 10 - car.hight as i32 {
-                            car.dir = Direction::West;
+                        if car.y == 400 + 24 && !car.is_turned {
+                            car.is_turned = true;
+                            car.dir = Direction::East;
                         }
                     }
                     Direction::Nord => {
                         car.y += 1;
-                        if car.y == 400 - 10 - car.hight as i32 {
+                        if car.y == 400 - 24 - car.hight as i32 && !car.is_turned {
+                            car.is_turned = true;
                             car.dir = Direction::West;
                         }
                     }
                     Direction::West => {
                         car.x -= 1;
-                        if car.y == 400 - 10 - car.hight as i32 {
-                            car.dir = Direction::West;
+                        if car.x == 400 + 24 && !car.is_turned {
+                            car.is_turned = true;
+                            car.dir = Direction::Sud;
                         }
                     }
-                    Direction::Ouest => {
+                    Direction::East => {
                         car.x += 1;
-                        if car.y == 400 - 10 - car.hight as i32 {
-                            car.dir = Direction::West;
+                        if car.x == 400 - 24 - car.hight as i32 && !car.is_turned {
+                            car.is_turned = true;
+                            car.dir = Direction::Nord;
                         }
                     }
                 }
