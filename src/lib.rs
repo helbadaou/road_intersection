@@ -212,8 +212,10 @@ pub fn generate_cars(key_t: Key, size: (u32, u32)) -> Car {
         Color::RGB(0, 255, 0),
         Color::RGB(0, 0, 255),
     ];
+
     let mut rng = rand::thread_rng();
     let mut g = rng.gen_range(0..=2);
+
     match key_t {
         Key::Up => Car::new(
             Direction::Sud,
