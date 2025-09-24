@@ -4,6 +4,7 @@ use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
+use std::collections::HashMap;
 use std::time::Duration;
 
 pub struct Sud {}
@@ -14,7 +15,8 @@ pub struct Ouest {}
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
-
+    // let window_height = 800;
+    // let window_width = 800;
     let window = video_subsystem
         .window("rust-sdl2 demo", 800, 800)
         .position_centered()
@@ -43,36 +45,64 @@ pub fn main() {
                     keycode: Some(Keycode::Up),
                     ..
                 } => {
-                    cars[0].push(generate_cars(Key::Up, canvas.window().size()));
-                    let vehicles_not_passed: Vec<Car> =
-                        cars[0].iter().filter(|car| !car.passed).cloned().collect();
+                    if cars[0].len() == 0 {
+                        cars[0].push(generate_cars(Key::Up, canvas.window().size()));
+                    } else {
+                        let vehicles_not_passed: Vec<Car> = cars[0].iter().filter(|car| !car.passed).cloned().collect();
+                        let car = &vehicles_not_passed[vehicles_not_passed.len()-1];
+                        let car1  = generate_cars(Key::Up, canvas.window().size()) ;
+                        if car1.y - car.y > car1.hight as i32 + 20 {
+                            cars[0].push(car1);
+                        } 
+                    }
                 }
 
                 Event::KeyDown {
                     keycode: Some(Keycode::Down),
                     ..
                 } => {
-                    cars[1].push(generate_cars(Key::Down, canvas.window().size()));
-                    let vehicles_not_passed: Vec<Car> =
-                        cars[1].iter().filter(|car| !car.passed).cloned().collect();
+                    if cars[1].len() == 0 {
+                        cars[1].push(generate_cars(Key::Down, canvas.window().size()));
+                    } else {
+                        let vehicles_not_passed: Vec<Car> = cars[1].iter().filter(|car| !car.passed).cloned().collect();
+                        let car = &vehicles_not_passed[vehicles_not_passed.len()-1];
+                        let car1  = generate_cars(Key::Down, canvas.window().size());
+                        if car.y > car1.hight as i32 + 20 {
+                            cars[1].push(car1);
+                        }
+                    }
                 },
 
                 Event::KeyDown {
                     keycode: Some(Keycode::Left),
                     ..
                 } => {
-                    cars[2].push(generate_cars(Key::Left, canvas.window().size()));
-                    let vehicles_not_passed: Vec<Car> =
-                        cars[2].iter().filter(|car| !car.passed).cloned().collect();
+                    if cars[2].len() == 0 {
+                        cars[2].push(generate_cars(Key::Left, canvas.window().size()));
+                    } else {
+                        let vehicles_not_passed: Vec<Car> = cars[2].iter().filter(|car| !car.passed).cloned().collect();
+                        let car = &vehicles_not_passed[vehicles_not_passed.len()-1];
+                        let car1  = generate_cars(Key::Left, canvas.window().size());
+                        if car1.x - car.x > car1.hight as i32 + 20 {
+                            cars[2].push(car1);
+                        } 
+                    }
                 },
 
                 Event::KeyDown {
                     keycode: Some(Keycode::Right),
                     ..
                 } => {
-                    cars[3].push(generate_cars(Key::Right, canvas.window().size()));
-                    let vehicles_not_passed: Vec<Car> =
-                        cars[3].iter().filter(|car| !car.passed).cloned().collect();
+                    if cars[3].len() == 0 {
+                        cars[3].push(generate_cars(Key::Right, canvas.window().size()));
+                    } else {
+                        let vehicles_not_passed: Vec<Car> = cars[3].iter().filter(|car| !car.passed).cloned().collect();
+                        let car = &vehicles_not_passed[vehicles_not_passed.len()-1];
+                        let car1  = generate_cars(Key::Right, canvas.window().size());
+                        if car.x > car1.hight as i32 + 20 {
+                            cars[3].push(car1);
+                        } 
+                    }
                 },
 
                 _ => {}
@@ -95,28 +125,45 @@ pub fn main() {
             canvas.set_draw_color(light.color);
             let _ = canvas.draw_rect(Rect::new(light.x, light.y, light.width, light.hight));
         }
-        // if cars.len() > 0 {
-        for car in cars[0].iter_mut() {
-            match car.dir {
-                Direction::Sud => {
-                    car.y -= 1;
-                }
-                Direction::Nord => {
-                    car.y += 1;
-                }
-                Direction::West => {
-                    car.x -= 1;
-                }
-                Direction::Ouest => {
-                    car.x += 1;
+
+        // let d = {
+        //     up: (1, 0)
+        // };
+
+        for carss in cars.iter_mut() {
+            for car in carss.iter_mut() {
+                match car.dir {
+                    Direction::Sud => {
+                        car.y -= 1;
+                        if car.y == 400 - 10 - car.hight as i32 {
+                            car.dir = Direction::West;
+                        }
+                    }
+                    Direction::Nord => {
+                        car.y += 1;
+                        if car.y == 400 - 10 - car.hight as i32 {
+                            car.dir = Direction::West;
+                        }
+                    }
+                    Direction::West => {
+                        car.x -= 1;
+                        if car.y == 400 - 10 - car.hight as i32 {
+                            car.dir = Direction::West;
+                        }
+                    }
+                    Direction::Ouest => {
+                        car.x += 1;
+                        if car.y == 400 - 10 - car.hight as i32 {
+                            car.dir = Direction::West;
+                        }
+                    }
                 }
             }
+            for car in carss.iter() {
+                canvas.set_draw_color(car.color);
+                let _ = canvas.draw_rect(Rect::new(car.x, car.y, car.width, car.hight));
+            }
         }
-        for car in cars[0].iter() {
-            canvas.set_draw_color(car.color);
-            let _ = canvas.draw_rect(Rect::new(car.x, car.y, car.width, car.hight));
-        }
-        // }
 
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
