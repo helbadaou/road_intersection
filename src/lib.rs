@@ -55,14 +55,14 @@ pub fn generate_points(size: (u32, u32)) -> Vec<Points> {
     res.push(Points(Point::new(middle_w + road_w, middle_h), Point::new(middle_w * 2, middle_h)));
     res
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Copy)]
 pub enum Direction {
     Sud,   // buttom
     Nord,  // top
     West,  // right
     East, // left
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Copy)]
 pub struct Traficlight {
     pub direction: Direction,
     pub color: Color,
@@ -103,22 +103,22 @@ pub fn generate_traficlight(size: (u32, u32)) -> Vec<Traficlight> {
     let height = (road_h / 2) as u32;
     res.push(
         Traficlight::new(
-            Direction::Nord,
+            Direction::Sud,
             Color::RGB(200, 0, 0),
             false,
-            middle_w - road_w - (width as i32) - 2,
-            middle_h - road_h - (height as i32) - 1,
+            middle_w + road_w + 2,
+            middle_h + road_h + 2,
             width,
             height
         )
     );
     res.push(
         Traficlight::new(
-            Direction::Sud,
+            Direction::Nord,
             Color::RGB(200, 0, 0),
             false,
-            middle_w + road_w + 2,
-            middle_h + road_h + 2,
+            middle_w - road_w - (width as i32) - 2,
+            middle_h - road_h - (height as i32) - 1,
             width,
             height
         )
@@ -136,7 +136,7 @@ pub fn generate_traficlight(size: (u32, u32)) -> Vec<Traficlight> {
     );
     res.push(
         Traficlight::new(
-            Direction::Sud,
+            Direction::East,
             Color::RGB(200, 0, 0),
             false,
             middle_w - road_w - (width as i32) - 2,
@@ -153,7 +153,7 @@ pub enum Key {
     Left,
     Right,
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Copy)]
 pub struct Car {
     pub dir: Direction,
     pub color: Color,
