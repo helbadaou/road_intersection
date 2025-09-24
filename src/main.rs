@@ -1,10 +1,13 @@
 extern crate sdl2;
+use rand::Rng;
 use road_intersection::*;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
+use sdl2::sys::KeyCode;
 use std::collections::HashMap;
+
 use std::time::Duration;
 
 pub struct Sud {}
@@ -48,12 +51,13 @@ pub fn main() {
                     if cars[0].len() == 0 {
                         cars[0].push(generate_cars(Key::Up, canvas.window().size()));
                     } else {
-                        let vehicles_not_passed: Vec<Car> = cars[0].iter().filter(|car| !car.passed).cloned().collect();
-                        let car = &vehicles_not_passed[vehicles_not_passed.len()-1];
-                        let car1  = generate_cars(Key::Up, canvas.window().size()) ;
+                        let vehicles_not_passed: Vec<Car> =
+                            cars[0].iter().filter(|car| !car.passed).cloned().collect();
+                        let car = &vehicles_not_passed[vehicles_not_passed.len() - 1];
+                        let car1 = generate_cars(Key::Up, canvas.window().size());
                         if car1.y - car.y > car1.hight as i32 + 20 {
                             cars[0].push(car1);
-                        } 
+                        }
                     }
                 }
 
@@ -64,14 +68,15 @@ pub fn main() {
                     if cars[1].len() == 0 {
                         cars[1].push(generate_cars(Key::Down, canvas.window().size()));
                     } else {
-                        let vehicles_not_passed: Vec<Car> = cars[1].iter().filter(|car| !car.passed).cloned().collect();
-                        let car = &vehicles_not_passed[vehicles_not_passed.len()-1];
-                        let car1  = generate_cars(Key::Down, canvas.window().size());
+                        let vehicles_not_passed: Vec<Car> =
+                            cars[1].iter().filter(|car| !car.passed).cloned().collect();
+                        let car = &vehicles_not_passed[vehicles_not_passed.len() - 1];
+                        let car1 = generate_cars(Key::Down, canvas.window().size());
                         if car.y > car1.hight as i32 + 20 {
                             cars[1].push(car1);
                         }
                     }
-                },
+                }
 
                 Event::KeyDown {
                     keycode: Some(Keycode::Left),
@@ -80,14 +85,15 @@ pub fn main() {
                     if cars[2].len() == 0 {
                         cars[2].push(generate_cars(Key::Left, canvas.window().size()));
                     } else {
-                        let vehicles_not_passed: Vec<Car> = cars[2].iter().filter(|car| !car.passed).cloned().collect();
-                        let car = &vehicles_not_passed[vehicles_not_passed.len()-1];
-                        let car1  = generate_cars(Key::Left, canvas.window().size());
+                        let vehicles_not_passed: Vec<Car> =
+                            cars[2].iter().filter(|car| !car.passed).cloned().collect();
+                        let car = &vehicles_not_passed[vehicles_not_passed.len() - 1];
+                        let car1 = generate_cars(Key::Left, canvas.window().size());
                         if car1.x - car.x > car1.hight as i32 + 20 {
                             cars[2].push(car1);
-                        } 
+                        }
                     }
-                },
+                }
 
                 Event::KeyDown {
                     keycode: Some(Keycode::Right),
@@ -96,15 +102,38 @@ pub fn main() {
                     if cars[3].len() == 0 {
                         cars[3].push(generate_cars(Key::Right, canvas.window().size()));
                     } else {
-                        let vehicles_not_passed: Vec<Car> = cars[3].iter().filter(|car| !car.passed).cloned().collect();
-                        let car = &vehicles_not_passed[vehicles_not_passed.len()-1];
-                        let car1  = generate_cars(Key::Right, canvas.window().size());
+                        let vehicles_not_passed: Vec<Car> =
+                            cars[3].iter().filter(|car| !car.passed).cloned().collect();
+                        let car = &vehicles_not_passed[vehicles_not_passed.len() - 1];
+                        let car1 = generate_cars(Key::Right, canvas.window().size());
                         if car.x > car1.hight as i32 + 20 {
                             cars[3].push(car1);
-                        } 
+                        }
                     }
-                },
-
+                }
+                Event::KeyDown {
+                    keycode: Some(Keycode::R),
+                    ..
+                } => {
+                    let rend = vec![Key::Up, Key::Down, Key::Left, Key::Right];
+                    let mut rng = rand::thread_rng();
+                    let g = rng.gen_range(0..=3);
+                    if cars[g].len() == 0 {
+                        cars[g].push(generate_cars(rend[g], canvas.window().size()));
+                    } else {
+                        let vehicles_not_passed: Vec<Car> =
+                            cars[g].iter().filter(|car| !car.passed).cloned().collect();
+                        let car = &vehicles_not_passed[vehicles_not_passed.len() - 1];
+                        let car1 = generate_cars(rend[g], canvas.window().size());
+                        if (g == 3 && car.x > car1.hight as i32 + 20)
+                            || (g == 0 && car1.y - car.y > car1.hight as i32 + 20)
+                            || (g == 1 && car.y > car1.hight as i32 + 20)
+                            || (g == 2 && car1.x - car.x > car1.hight as i32 + 20)
+                        {
+                            cars[g].push(car1);
+                        }
+                    }
+                }
                 _ => {}
             }
         }
@@ -125,8 +154,6 @@ pub fn main() {
             canvas.set_draw_color(light.color);
             let _ = canvas.draw_rect(Rect::new(light.x, light.y, light.width, light.hight));
         }
-
-
 
         for carss in cars.iter_mut() {
             for car in carss.iter_mut() {
