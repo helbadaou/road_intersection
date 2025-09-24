@@ -57,10 +57,10 @@ pub fn generate_points(size: (u32, u32)) -> Vec<Points> {
 }
 #[derive(Clone, Debug)]
 pub enum Direction {
-    Sud, // buttom
-    Nord, // top
-    West, // right
-    Ouest, // left
+    Sud,   // buttom
+    Nord,  // top
+    West,  // right
+    East, // left
 }
 #[derive(Clone, Debug)]
 pub struct Traficlight {
@@ -163,6 +163,7 @@ pub struct Car {
     pub y: i32,
     pub width: u32,
     pub hight: u32,
+    pub is_turned: bool,
 }
 impl Car {
     pub fn new(
@@ -183,6 +184,7 @@ impl Car {
             y,
             width,
             hight,
+            is_turned: false,
         }
     }
 }
@@ -199,45 +201,41 @@ pub fn generate_cars(key_t: Key, size: (u32, u32)) -> Car {
     let mut g = rng.gen_range(0..=2);
 
     match key_t {
-        Key::Up =>
-            Car::new(
-                Direction::Sud,
-                color[g],
-                g.try_into().unwrap(),
-                middle_w + (width as i32) / 2,
-                (size.1 as i32) - (height as i32),
-                width,
-                height
-            ),
-        Key::Left =>
-            Car::new(
-                Direction::West,
-                color[g],
-                g.try_into().unwrap(),
-                (size.0 as i32) - (width as i32),
-                middle_h - (height as i32) / 2 - (height as i32),
-                width,
-                height
-            ),
-        Key::Down =>
-            Car::new(
-                Direction::Nord,
-                color[g],
-                g.try_into().unwrap(),
-                middle_w - (width as i32) / 2 - (height as i32),
-                0,
-                width,
-                height
-            ),
-        _ =>
-            Car::new(
-                Direction::Ouest,
-                color[g],
-                g.try_into().unwrap(),
-                0,
-                middle_h + (height as i32) / 2,
-                width,
-                height
-            ),
+        Key::Up => Car::new(
+            Direction::Sud,
+            color[g],
+            g.try_into().unwrap(),
+            middle_w + (width as i32) / 2,
+            (size.1 as i32) - (height as i32),
+            width,
+            height,
+        ),
+        Key::Left => Car::new(
+            Direction::West,
+            color[g],
+            g.try_into().unwrap(),
+            (size.0 as i32) - (width as i32),
+            middle_h - (height as i32) / 2 - (height as i32),
+            width,
+            height,
+        ),
+        Key::Down => Car::new(
+            Direction::Nord,
+            color[g],
+            g.try_into().unwrap(),
+            middle_w - (width as i32) / 2 - (height as i32),
+            0,
+            width,
+            height,
+        ),
+        _ => Car::new(
+            Direction::East,
+            color[g],
+            g.try_into().unwrap(),
+            0,
+            middle_h + (height as i32) / 2,
+            width,
+            height,
+        ),
     }
 }
