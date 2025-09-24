@@ -126,9 +126,7 @@ pub fn main() {
             let _ = canvas.draw_rect(Rect::new(light.x, light.y, light.width, light.hight));
         }
 
-        // let d = {
-        //     up: (1, 0)
-        // };
+
 
         for carss in cars.iter_mut() {
             for car in carss.iter_mut() {
@@ -161,7 +159,7 @@ pub fn main() {
             }
             for car in carss.iter() {
                 canvas.set_draw_color(car.color);
-                let _ = canvas.draw_rect(Rect::new(car.x, car.y, car.width, car.hight));
+                let _ = canvas.fill_rect(Rect::new(car.x, car.y, car.width, car.hight));
             }
         }
 
