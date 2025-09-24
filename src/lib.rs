@@ -1,6 +1,6 @@
+use rand::Rng;
 use sdl2::pixels::Color;
 use sdl2::rect::Point;
-use rand::Rng;
 
 pub struct Points(pub Point, pub Point);
 pub fn generate_points(size: (u32, u32)) -> Vec<Points> {
@@ -9,57 +9,66 @@ pub fn generate_points(size: (u32, u32)) -> Vec<Points> {
     let middle_h: i32 = (size.1 / 2) as i32;
     let road_w: i32 = ((size.0 * 12) / 100) as i32;
     let road_h: i32 = ((size.0 * 12) / 100) as i32;
-    res.push(
-        Points(Point::new(middle_w - road_w, 0), Point::new(middle_w - road_w, middle_h - road_h))
-    );
-    res.push(
-        Points(Point::new(0, middle_h - road_h), Point::new(middle_w - road_w, middle_h - road_h))
-    );
-    res.push(
-        Points(Point::new(middle_w + road_w, 0), Point::new(middle_w + road_w, middle_h - road_h))
-    );
-    res.push(
-        Points(
-            Point::new(middle_w + road_w, middle_h - road_h),
-            Point::new(middle_w * 2, middle_h - road_h)
-        )
-    );
-    res.push(
-        Points(Point::new(0, middle_h + road_h), Point::new(middle_w - road_w, middle_h + road_h))
-    );
-    res.push(
-        Points(
-            Point::new(middle_w - road_w, middle_h + road_h),
-            Point::new(middle_w - road_w, middle_h * 2)
-        )
-    );
-    res.push(
-        Points(
-            Point::new(middle_w + road_w, middle_h + road_h),
-            Point::new(middle_w * 2, middle_h + road_h)
-        )
-    );
-    res.push(
-        Points(
-            Point::new(middle_w + road_w, middle_h + road_h),
-            Point::new(middle_w + road_w, middle_h * 2)
-        )
-    );
+    res.push(Points(
+        Point::new(middle_w - road_w, 0),
+        Point::new(middle_w - road_w, middle_h - road_h),
+    ));
+    res.push(Points(
+        Point::new(0, middle_h - road_h),
+        Point::new(middle_w - road_w, middle_h - road_h),
+    ));
+    res.push(Points(
+        Point::new(middle_w + road_w, 0),
+        Point::new(middle_w + road_w, middle_h - road_h),
+    ));
+    res.push(Points(
+        Point::new(middle_w + road_w, middle_h - road_h),
+        Point::new(middle_w * 2, middle_h - road_h),
+    ));
+    res.push(Points(
+        Point::new(0, middle_h + road_h),
+        Point::new(middle_w - road_w, middle_h + road_h),
+    ));
+    res.push(Points(
+        Point::new(middle_w - road_w, middle_h + road_h),
+        Point::new(middle_w - road_w, middle_h * 2),
+    ));
+    res.push(Points(
+        Point::new(middle_w + road_w, middle_h + road_h),
+        Point::new(middle_w * 2, middle_h + road_h),
+    ));
+    res.push(Points(
+        Point::new(middle_w + road_w, middle_h + road_h),
+        Point::new(middle_w + road_w, middle_h * 2),
+    ));
 
-    res.push(Points(Point::new(middle_w, 0), Point::new(middle_w, middle_h - road_h)));
-    res.push(
-        Points(Point::new(middle_w, middle_h - road_h), Point::new(middle_w, middle_h - road_h))
-    );
-    res.push(Points(Point::new(middle_w, middle_h + road_h), Point::new(middle_w, middle_h * 2)));
-    res.push(Points(Point::new(0, middle_h), Point::new(middle_w - road_w, middle_h)));
-    res.push(Points(Point::new(middle_w + road_w, middle_h), Point::new(middle_w * 2, middle_h)));
+    res.push(Points(
+        Point::new(middle_w, 0),
+        Point::new(middle_w, middle_h - road_h),
+    ));
+    res.push(Points(
+        Point::new(middle_w, middle_h - road_h),
+        Point::new(middle_w, middle_h - road_h),
+    ));
+    res.push(Points(
+        Point::new(middle_w, middle_h + road_h),
+        Point::new(middle_w, middle_h * 2),
+    ));
+    res.push(Points(
+        Point::new(0, middle_h),
+        Point::new(middle_w - road_w, middle_h),
+    ));
+    res.push(Points(
+        Point::new(middle_w + road_w, middle_h),
+        Point::new(middle_w * 2, middle_h),
+    ));
     res
 }
 #[derive(Clone, Debug, Copy)]
 pub enum Direction {
-    Sud,   // buttom
-    Nord,  // top
-    West,  // right
+    Sud,  // buttom
+    Nord, // top
+    West, // right
     East, // left
 }
 #[derive(Clone, Debug, Copy)]
@@ -80,7 +89,7 @@ impl Traficlight {
         x: i32,
         y: i32,
         width: u32,
-        hight: u32
+        hight: u32,
     ) -> Self {
         Self {
             direction,
@@ -147,6 +156,7 @@ pub fn generate_traficlight(size: (u32, u32)) -> Vec<Traficlight> {
     );
     res
 }
+#[derive(PartialEq, Clone, Copy)]
 pub enum Key {
     Up,
     Down,
@@ -173,7 +183,7 @@ impl Car {
         x: i32,
         y: i32,
         width: u32,
-        hight: u32
+        hight: u32,
     ) -> Self {
         Self {
             dir,
@@ -190,16 +200,20 @@ impl Car {
 }
 
 pub fn generate_cars(key_t: Key, size: (u32, u32)) -> Car {
+
     let middle_w: i32 = (size.0 / 2) as i32;
     let middle_h: i32 = (size.1 / 2) as i32;
     let road_w: i32 = ((size.0 * 12) / 100) as i32;
     let road_h: i32 = ((size.1 * 12) / 100) as i32;
     let width = (road_w / 2) as u32;
     let height = (road_h / 2) as u32;
-    let color = vec![Color::RGB(255, 0, 0), Color::RGB(0, 255, 0), Color::RGB(0, 0, 255)];
+    let color = vec![
+        Color::RGB(255, 0, 0),
+        Color::RGB(0, 255, 0),
+        Color::RGB(0, 0, 255),
+    ];
     let mut rng = rand::thread_rng();
     let mut g = rng.gen_range(0..=2);
-
     match key_t {
         Key::Up => Car::new(
             Direction::Sud,
